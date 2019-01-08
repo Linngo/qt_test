@@ -37,7 +37,7 @@ bool MyDib::Open(char* pzFileName)
 {
 	FILE *fp;
 	int nBmpFileHeaderSize;
-	//λͼ�ļ�ͷ,��Сռ14���ֽ�
+	//位图文件头,大小占14个字节
 	nBmpFileHeaderSize = sizeof(BITMAPFILEHEADER);
 
 	fp = fopen(pzFileName, "rb");
@@ -45,19 +45,19 @@ bool MyDib::Open(char* pzFileName)
 		goto exit;
 	fread((void *)&bmpFileHeader, nBmpFileHeaderSize, 1, fp);
 
-	//�ж��ļ��ǲ���bmp�ļ�
+	//判断文件是不是bmp文件
 	if (bmpFileHeader.bfType != *((WORD *)"BM"))
 		goto failure;
 
-	//�����ڴ�,�������λͼ�ļ�ͷ+��ɫ��+����
+	//分配内存,用来存放位图文件头+调色板+数据
 	m_pDib = (BYTE *)malloc((bmpFileHeader.bfSize - nBmpFileHeaderSize)*sizeof(BYTE));
 
-	//�����ڴ�ʧ�ܾ�ȥfailure
+	//分配内存失败就去failure
 	if (!m_pDib)
 		goto failure;
 	memset(m_pDib, 0, bmpFileHeader.bfSize - nBmpFileHeaderSize);
 
-	//�Ѷ�ȡ����Ϣ������m_pDib��ָ����ڴ���
+	//把读取的信息保存在m_pDib所指向的内存中
 	fread(m_pDib, 1, bmpFileHeader.bfSize - nBmpFileHeaderSize, fp);
 
 
@@ -66,7 +66,7 @@ bool MyDib::Open(char* pzFileName)
 		
 		BITMAPINFOHEADER *pDib = (BITMAPINFOHEADER *)m_pDib;
 
-		//����λͼ�Ĵ�С
+		//设置位图的大小
 		pDib->biSizeImage = ((((pDib->biWidth*pDib->biBitCount) + 31)&~31) >> 3)*pDib->biHeight;
 		printf("%d", pDib->biSizeImage);
 	}
@@ -88,37 +88,37 @@ bool MyDib::Save(char* pzFileName,int h, int w)
 	FILE *fp;
 	int nBmpFileHeaderSize;
     RGBQUAD rgb[256];
-	//λͼ�ļ�ͷ,��Сռ14���ֽ�
+	//位图文件头,大小占14个字节
 	nBmpFileHeaderSize = sizeof(BITMAPFILEHEADER);
 
 	fp = fopen(pzFileName, "wb");
 	if (!fp)
         return FALSE;
    //     goto exit;
-	//д�ļ�ͷ��Ϣ
+	//写文件头信息
     bmpFileHeader.bfSize=h*w;
 
 	fwrite(&bmpFileHeader, nBmpFileHeaderSize,1,fp);
-	//д��Ϣͷ��Ϣ
+	//写信息头信息
 	BITMAPINFOHEADER*   bi = (BITMAPINFOHEADER *)m_pDib;
 
     bi->biWidth=w;
     bi->biHeight=h;
 
 	fwrite(bi, bi->biSize, 1, fp);
-	//�ж�m_pDib�ǲ��Ƿ���ʧ��
+	//判断m_pDib是不是分配失败
 	if (!m_pDib)
 		goto failure;
 
-	//���ļ���д���ɫ��
-//    for (int i = 0, j = 0; i < 256; i++)
-//    {
-//        rgb[i].rgbBlue = i;
-//        rgb[i].rgbGreen = i;
-//        rgb[i].rgbRed = i;
-//        rgb[i].rgbReserved = 0;
-//    }
-    memcpy(rgb,m_pDib+40,1024);
+	//向文件中写入调色板
+    for (int i = 0, j = 0; i < 256; i++)
+    {
+        rgb[i].rgbBlue = i;
+        rgb[i].rgbGreen = i;
+        rgb[i].rgbRed = i;
+        rgb[i].rgbReserved = 0;
+    }
+//    memcpy(rgb,m_pDib+40,1024);
 
 //    for (int i = 0; i < 256; i++)
 //    {
@@ -132,7 +132,7 @@ bool MyDib::Save(char* pzFileName,int h, int w)
 //    }
 
 	fwrite(&rgb, sizeof(rgb), 1, fp);
-	//���ļ���д��λͼ��Ϣ
+	//向文件中写入位图信息
     fwrite(m_pDibBits, this->GetSize(),1,fp);
 	 
 	fclose(fp);

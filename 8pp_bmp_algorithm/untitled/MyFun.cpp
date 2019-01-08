@@ -3,17 +3,17 @@
 #define LOW 0
 
 
-//Ò»½×Î¢·Ö±ßÔµ¼ì²â
+//ä¸€é˜¶å¾®åˆ†è¾¹ç¼˜æ£€æµ‹
 void Differential(BYTE *image_in, BYTE *image_out, int xsize, int ysize, float amp)
 {
 /*////////////////////////////////////////////////////////////////////
-// ×÷Õß£ºÑî¿ı
-//²ÎÊıÁĞ±í£º 
-//image_in			ÊäÈëÍ¼ÏñµÄÖ¸Õë
-//image_out		Êä³öÍ¼ÏñµÄÖ¸Õë
-//xsize				Í¼ÏñµÄ¿í
-//ysize				Í¼ÏñµÄ¸ß
-//amp					Êä³öÏñËØÖµ±¶Êı
+// ä½œè€…ï¼šæ¨é­
+//å‚æ•°åˆ—è¡¨ï¼š 
+//image_in			è¾“å…¥å›¾åƒçš„æŒ‡é’ˆ
+//image_out		è¾“å‡ºå›¾åƒçš„æŒ‡é’ˆ
+//xsize				å›¾åƒçš„å®½
+//ysize				å›¾åƒçš„é«˜
+//amp					è¾“å‡ºåƒç´ å€¼å€æ•°
 ////////////////////////////////////////////////////////////////////*/
 	static int cx[9] = { 0, 0, 0,
 		0, 1, 0,
@@ -52,17 +52,17 @@ void Differential(BYTE *image_in, BYTE *image_out, int xsize, int ysize, float a
 	}
 }
 
-//¶ş½×Î¢·Ö±ßÔµ¼ì²â
+//äºŒé˜¶å¾®åˆ†è¾¹ç¼˜æ£€æµ‹
 void Differential2(BYTE *image_in, BYTE *image_out, int xsize, int ysize, float amp)
 {
 /*////////////////////////////////////////////////////////////////////
-// ×÷Õß£ºÑî¿ı
-//²ÎÊıÁĞ±í£º
-//image_in			ÊäÈëÍ¼ÏñµÄÖ¸Õë
-//image_out		Êä³öÍ¼ÏñµÄÖ¸Õë
-//xsize				Í¼ÏñµÄ¿í
-//ysize				Í¼ÏñµÄ¸ß
-//amp					Êä³öÏñËØÖµ±¶Êı
+// ä½œè€…ï¼šæ¨é­
+//å‚æ•°åˆ—è¡¨ï¼š
+//image_in			è¾“å…¥å›¾åƒçš„æŒ‡é’ˆ
+//image_out		è¾“å‡ºå›¾åƒçš„æŒ‡é’ˆ
+//xsize				å›¾åƒçš„å®½
+//ysize				å›¾åƒçš„é«˜
+//amp					è¾“å‡ºåƒç´ å€¼å€æ•°
 ////////////////////////////////////////////////////////////////////*/
 	static int c[9] = { -1, -1, -1,
 							-1, 8, -1,
@@ -99,16 +99,16 @@ void Differential2(BYTE *image_in, BYTE *image_out, int xsize, int ysize, float 
 	}
 }
 
-//¶şÖµ»¯
-void Binary(BYTE *image_in, BYTE *image_out, int xsize, int ysize ,int threshold/*ãĞÖµ*/)
+//äºŒå€¼åŒ–
+void Binary(BYTE *image_in, BYTE *image_out, int xsize, int ysize ,int threshold/*é˜ˆå€¼*/)
 {
 	/*////////////////////////////////////////////////////////////////////
-	// ×÷Õß£ºÑî¿ı
-	//²ÎÊıÁĞ±í£º
-	//image_in			ÊäÈëÍ¼ÏñµÄÖ¸Õë
-	//image_out		Êä³öÍ¼ÏñµÄÖ¸Õë
-	//xsize				Í¼ÏñµÄ¿í
-	//ysize				Í¼ÏñµÄ¸ß
+	// ä½œè€…ï¼šæ¨é­
+	//å‚æ•°åˆ—è¡¨ï¼š
+	//image_in			è¾“å…¥å›¾åƒçš„æŒ‡é’ˆ
+	//image_out		è¾“å‡ºå›¾åƒçš„æŒ‡é’ˆ
+	//xsize				å›¾åƒçš„å®½
+	//ysize				å›¾åƒçš„é«˜
 	///////////////////////////////////////////////////////////////////*/
 	for (int i = 0; i < ysize; i++)
 	{
@@ -116,26 +116,26 @@ void Binary(BYTE *image_in, BYTE *image_out, int xsize, int ysize ,int threshold
 		{
 			if (*(image_in+i*xsize+j)<threshold)
 			{
-				*(image_out + i*xsize + j) = 255;
+                *(image_out + i*xsize + j) = 0;
 			}
 			else
 			{
-				*(image_out + i*xsize + j) = 0;
+                *(image_out + i*xsize + j) = 255;
 			}
 		}
 	}
 }
 
-//°ÑÒ»¸öÖ¸ÕëËùÖ¸ÏòµÄÄÚÈİ¸³¸øÁíÒ»¸ö
+//æŠŠä¸€ä¸ªæŒ‡é’ˆæ‰€æŒ‡å‘çš„å†…å®¹èµ‹ç»™å¦ä¸€ä¸ª
 void Image_To_Image(BYTE *image_des, BYTE *image_src, int Image_size)
 {
 /*////////////////////////////////////////////////////////////////////
-// ×÷Õß£ºÑî¿ı
-//²ÎÊıÁĞ±í£º 
-//image_des			Òª±»¸Ä±äµÄÖ¸Õë
-//image_src				Í¼ÏñµÄÖ¸Õë
-//Image_size			Í¼ÏñÓĞ¶àÉÙ¸öÏñËØ£¬8Î»Í¼  
-//°Ñimage_srcËùÖ¸ÏòµÄÄÚÈİ¸³¸øimage_des
+// ä½œè€…ï¼šæ¨é­
+//å‚æ•°åˆ—è¡¨ï¼š 
+//image_des			è¦è¢«æ”¹å˜çš„æŒ‡é’ˆ
+//image_src				å›¾åƒçš„æŒ‡é’ˆ
+//Image_size			å›¾åƒæœ‰å¤šå°‘ä¸ªåƒç´ ï¼Œ8ä½å›¾  
+//æŠŠimage_srcæ‰€æŒ‡å‘çš„å†…å®¹èµ‹ç»™image_des
 ////////////////////////////////////////////////////////////////////*/
 	for (int i = 0; i < Image_size; i++)
 	{
@@ -160,16 +160,16 @@ int cconc(int inb[9])
 	return icn;
 }
 
-//¶şÖµ»¯Í¼ÏñµÄÏ¸»¯
+//äºŒå€¼åŒ–å›¾åƒçš„ç»†åŒ–
 void Thinning(BYTE *image_in, BYTE *image_out, int xsize, int ysize)
 {
 /*////////////////////////////////////////////////////////////////////
-// ×÷Õß£ºÑî¿ı
-//²ÎÊıÁĞ±í£º 
-//image_in			ÊäÈëÍ¼ÏñµÄÖ¸Õë
-//image_out		Êä³öÍ¼ÏñµÄÖ¸Õë
-//xsize				Í¼ÏñµÄ¿í
-//ysize				Í¼ÏñµÄ¸ß
+// ä½œè€…ï¼šæ¨é­
+//å‚æ•°åˆ—è¡¨ï¼š 
+//image_in			è¾“å…¥å›¾åƒçš„æŒ‡é’ˆ
+//image_out		è¾“å‡ºå›¾åƒçš„æŒ‡é’ˆ
+//xsize				å›¾åƒçš„å®½
+//ysize				å›¾åƒçš„é«˜
 ////////////////////////////////////////////////////////////////////*/
 	int ia[9], ic[9], i, ix, iy, m, ir, iv, iw;
 	for (iy = 0; iy < ysize;iy++)
@@ -283,16 +283,16 @@ void Thinning(BYTE *image_in, BYTE *image_out, int xsize, int ysize)
 	}
 }
 
-//ÒÆ¶¯Æ½¾ù·¨
+//ç§»åŠ¨å¹³å‡æ³•
 void Image_smooth(BYTE *image_in, BYTE *image_out, int xsize, int ysize)
 {
 	/*////////////////////////////////////////////////////////////////////
-	// ×÷Õß£ºÑî¿ı
-	//²ÎÊıÁĞ±í£º
-	//image_in			ÊäÈëÍ¼ÏñµÄÖ¸Õë
-	//image_out		Êä³öÍ¼ÏñµÄÖ¸Õë
-	//xsize				Í¼ÏñµÄ¿í
-	//ysize				Í¼ÏñµÄ¸ß
+	// ä½œè€…ï¼šæ¨é­
+	//å‚æ•°åˆ—è¡¨ï¼š
+	//image_in			è¾“å…¥å›¾åƒçš„æŒ‡é’ˆ
+	//image_out		è¾“å‡ºå›¾åƒçš„æŒ‡é’ˆ
+	//xsize				å›¾åƒçš„å®½
+	//ysize				å›¾åƒçš„é«˜
 	////////////////////////////////////////////////////////////////////*/
 	int i, j, buf;
 	for (i = 1; i < ysize - 1;i++)
@@ -307,16 +307,16 @@ void Image_smooth(BYTE *image_in, BYTE *image_out, int xsize, int ysize)
 	}
 }
 
-//ÖĞÖµÂË²¨
+//ä¸­å€¼æ»¤æ³¢
 void Median(BYTE *image_in, BYTE *image_out, int xsize, int ysize)
 {
 	/*////////////////////////////////////////////////////////////////////
-	// ×÷Õß£ºÑî¿ı
-	//²ÎÊıÁĞ±í£º
-	//image_in			ÊäÈëÍ¼ÏñµÄÖ¸Õë
-	//image_out		Êä³öÍ¼ÏñµÄÖ¸Õë
-	//xsize				Í¼ÏñµÄ¿í
-	//ysize				Í¼ÏñµÄ¸ß
+	// ä½œè€…ï¼šæ¨é­
+	//å‚æ•°åˆ—è¡¨ï¼š
+	//image_in			è¾“å…¥å›¾åƒçš„æŒ‡é’ˆ
+	//image_out		è¾“å‡ºå›¾åƒçš„æŒ‡é’ˆ
+	//xsize				å›¾åƒçš„å®½
+	//ysize				å›¾åƒçš„é«˜
 	////////////////////////////////////////////////////////////////////*/
 	int i, j;
 	unsigned char	c[9];
@@ -338,7 +338,7 @@ void Median(BYTE *image_in, BYTE *image_out, int xsize, int ysize)
 	}
 }
 
-//·µ»ØÊı×éÖĞ¼äÖµ
+//è¿”å›æ•°ç»„ä¸­é—´å€¼
 int median_value(BYTE c[9])
 {
 	int i, j, buf;
@@ -357,16 +357,16 @@ int median_value(BYTE c[9])
 	return c[4];
 }
 
-//¸¯Ê´´¦Àí
+//è…èš€å¤„ç†
 void Erodible(BYTE *image_in, BYTE *image_out, int xsize, int ysize)
 {
 	/*////////////////////////////////////////////////////////////////////
-	// ×÷Õß£ºÑî¿ı
-	//²ÎÊıÁĞ±í£º
-	//image_in			ÊäÈëÍ¼ÏñµÄÖ¸Õë
-	//image_out		Êä³öÍ¼ÏñµÄÖ¸Õë
-	//xsize				Í¼ÏñµÄ¿í
-	//ysize				Í¼ÏñµÄ¸ß
+	// ä½œè€…ï¼šæ¨é­
+	//å‚æ•°åˆ—è¡¨ï¼š
+	//image_in			è¾“å…¥å›¾åƒçš„æŒ‡é’ˆ
+	//image_out		è¾“å‡ºå›¾åƒçš„æŒ‡é’ˆ
+	//xsize				å›¾åƒçš„å®½
+	//ysize				å›¾åƒçš„é«˜
 	////////////////////////////////////////////////////////////////////*/
 	int i, j;
 	for (i = 1; i < ysize - 1;i++)
@@ -374,7 +374,7 @@ void Erodible(BYTE *image_in, BYTE *image_out, int xsize, int ysize)
 		for (j = 1; j < xsize;j++)
 		{
 			*(image_out + i*xsize + j) = *(image_in + i*xsize + j);
-			//Èç¹ûËüÖÜÎ§°Ë¸öµãÓĞÒ»¸öÊÇ°×µã¾Í±ä°×
+			//å¦‚æœå®ƒå‘¨å›´å…«ä¸ªç‚¹æœ‰ä¸€ä¸ªæ˜¯ç™½ç‚¹å°±å˜ç™½
 			if (*(image_in + (i - 1)*xsize + j-1) == LOW)
 				*(image_out + i*xsize + j) = LOW;
 			if (*(image_in + (i - 1)*xsize + j) == LOW)
@@ -396,16 +396,16 @@ void Erodible(BYTE *image_in, BYTE *image_out, int xsize, int ysize)
 	}
 }
 
-//ÅòÕÍ´¦Àí
+//è†¨èƒ€å¤„ç†
 void Dilation(BYTE *image_in, BYTE *image_out, int xsize, int ysize)
 {
 	/*////////////////////////////////////////////////////////////////////
-	// ×÷Õß£ºÑî¿ı
-	//²ÎÊıÁĞ±í£º
-	//image_in			ÊäÈëÍ¼ÏñµÄÖ¸Õë
-	//image_out		Êä³öÍ¼ÏñµÄÖ¸Õë
-	//xsize				Í¼ÏñµÄ¿í
-	//ysize				Í¼ÏñµÄ¸ß
+	// ä½œè€…ï¼šæ¨é­
+	//å‚æ•°åˆ—è¡¨ï¼š
+	//image_in			è¾“å…¥å›¾åƒçš„æŒ‡é’ˆ
+	//image_out		è¾“å‡ºå›¾åƒçš„æŒ‡é’ˆ
+	//xsize				å›¾åƒçš„å®½
+	//ysize				å›¾åƒçš„é«˜
 	////////////////////////////////////////////////////////////////////*/
 	int i, j;
 	for (i = 1; i < ysize - 1; i++)
@@ -413,7 +413,7 @@ void Dilation(BYTE *image_in, BYTE *image_out, int xsize, int ysize)
 		for (j = 1; j < xsize; j++)
 		{
 			*(image_out + i*xsize + j) = *(image_in + i*xsize + j);
-			//Èç¹ûËüÖÜÎ§°Ë¸öµãÓĞÒ»¸öÊÇ°×µã¾Í±ä°×
+			//å¦‚æœå®ƒå‘¨å›´å…«ä¸ªç‚¹æœ‰ä¸€ä¸ªæ˜¯ç™½ç‚¹å°±å˜ç™½
 			if (*(image_in + (i - 1)*xsize + j - 1) == HIGH)
 				*(image_out + i*xsize + j) = HIGH;
 			if (*(image_in + (i - 1)*xsize + j) == HIGH)
@@ -435,24 +435,24 @@ void Dilation(BYTE *image_in, BYTE *image_out, int xsize, int ysize)
 	}
 }
 
-//¾ùÖµ·½·¨Çó¶şÖµ»¯µÄãĞÖµ
+//å‡å€¼æ–¹æ³•æ±‚äºŒå€¼åŒ–çš„é˜ˆå€¼
 void Mean_method(BYTE *image_in, BYTE *image_out, int xsize, int ysize)
 {
 	/*////////////////////////////////////////////////////////////////////
-	// ×÷Õß£ºÑî¿ı
-	//²ÎÊıÁĞ±í£º
-	//image_in			ÊäÈëÍ¼ÏñµÄÖ¸Õë
-	//image_out		Êä³öÍ¼ÏñµÄÖ¸Õë
-	//xsize				Í¼ÏñµÄ¿í
-	//ysize				Í¼ÏñµÄ¸ß
+	// ä½œè€…ï¼šæ¨é­
+	//å‚æ•°åˆ—è¡¨ï¼š
+	//image_in			è¾“å…¥å›¾åƒçš„æŒ‡é’ˆ
+	//image_out		è¾“å‡ºå›¾åƒçš„æŒ‡é’ˆ
+	//xsize				å›¾åƒçš„å®½
+	//ysize				å›¾åƒçš„é«˜
 	////////////////////////////////////////////////////////////////////*/
 	int sum = 0;
-	int i, j, h, k;;//ÓÃÓÚÑ­»·
-	int T = 0;//ãĞÖµ
-	int num = 0;//ÓÃÓÚ×Ô¼Ó
-	int w_size = 7;//´°¿Ú´óĞ¡Îª2*w_size+1
+	int i, j, h, k;;//ç”¨äºå¾ªç¯
+	int T = 0;//é˜ˆå€¼
+	int num = 0;//ç”¨äºè‡ªåŠ 
+	int w_size = 7;//çª—å£å¤§å°ä¸º2*w_size+1
 	int Area = (2 * w_size + 1)*(2 * w_size + 1);
-	int *d = (int *)malloc(sizeof(int)*Area);//Êı×é¿Õ¼ä
+	int *d = (int *)malloc(sizeof(int)*Area);//æ•°ç»„ç©ºé—´
 
 	for (j = w_size; j < ysize - w_size; j++)
 	{
@@ -477,13 +477,13 @@ void Mean_method(BYTE *image_in, BYTE *image_out, int xsize, int ysize)
 	}
 	free(d);
 }
-//·µ»ØÄ³µãµÄ»Ò¶ÈÖµ
+//è¿”å›æŸç‚¹çš„ç°åº¦å€¼
 int GetGray(BYTE * image_in, int xsize, int x, int y)
 {
 	return *(image_in + y *xsize + x);
 }
 
-//ÑÕÉ«·´×ª
+//é¢œè‰²åè½¬
 void Back_White(BYTE *image_des, int image_size)
 {
 	for (int i = 0; i < image_size; i++)
@@ -521,7 +521,9 @@ int is_in_array(int x, int y, int height, int width)
     else
         return 0;
 }
-
+/***************************
+åŒçº¿æ€§å†…æ’
+***************************/
 void bilinera_interpolation(BYTE* in_array, int height, int width,
                             BYTE* out_array, int out_height, int out_width)
 {
@@ -529,11 +531,12 @@ void bilinera_interpolation(BYTE* in_array, int height, int width,
            w_times = (double)out_width / (double)width;
     int  x1, y1, x2, y2, f11, f12, f21, f22;
     double x, y;
+    double test = 0;
 
     for (int i = 0; i < out_height; i++){
         for (int j = 0; j < out_width; j++){
-            x = (j+0.5) / w_times - 0.5;
-            y = (i+0.5) / h_times - 0.5;
+            x = (j+test) / w_times - test;
+            y = (i+test) / h_times - test;
             x1 = (int)(x - 1);
             x2 = (int)(x + 1);
             y1 = (int)(y + 1);
@@ -550,27 +553,46 @@ void bilinera_interpolation(BYTE* in_array, int height, int width,
     }
 }
 
-//NiBlack Ä£ºıãĞÖµ·Ö¸î
+//æœ€é‚»è¿‘ç‚¹
+void interpolation(BYTE* in_array, int height, int width,
+                   BYTE* out_array, int out_height, int out_width)
+{
+    int i,j;
+    int dwsrcY,dwsrcX;
+    BYTE *pucDest,*pucSrc;
+    for(i=0;i<out_height;i++)
+    {
+     dwsrcY=i*height/out_height;
+     pucDest=out_array+i*out_width;
+     pucSrc=in_array+dwsrcY*width;
+     for(j=0;j<out_width;j++)
+     {
+      dwsrcX=j*width/out_width;
+      memcpy(pucDest+j,pucSrc+dwsrcX,1);//æ•°æ®æ‹·è´
+     }
+    }
+}
+
+//NiBlack æ¨¡ç³Šé˜ˆå€¼åˆ†å‰²
 void NiBlack(BYTE *image_in, BYTE *image_out, int xsize, int ysize)
 {
 	/*////////////////////////////////////////////////////////////////////
-	// ×÷Õß£ºÑî¿ı
-	//²ÎÊıÁĞ±í£º
-	//image_in			ÊäÈëÍ¼ÏñµÄÖ¸Õë
-	//image_out		Êä³öÍ¼ÏñµÄÖ¸Õë
-	//xsize				Í¼ÏñµÄ¿í
-	//ysize				Í¼ÏñµÄ¸ß
+	//å‚æ•°åˆ—è¡¨ï¼š
+	//image_in			è¾“å…¥å›¾åƒçš„æŒ‡é’ˆ
+	//image_out		è¾“å‡ºå›¾åƒçš„æŒ‡é’ˆ
+	//xsize				å›¾åƒçš„å®½
+	//ysize				å›¾åƒçš„é«˜
 	////////////////////////////////////////////////////////////////////*/
 
 	int sum = 0;
-	int i, j, h, k;;//ÓÃÓÚÑ­»·
-	int Average = 0;//Æ½¾ùÖµ
-	int num = 0;//ÓÃÓÚ×Ô¼Ó
-	int w_size = 7;//´°¿Ú´óĞ¡Îª2*w_size+1
+	int i, j, h, k;;//ç”¨äºå¾ªç¯
+	int Average = 0;//å¹³å‡å€¼
+	int num = 0;//ç”¨äºè‡ªåŠ 
+	int w_size = 7;//çª—å£å¤§å°ä¸º2*w_size+1
 	int Area = (2 * w_size + 1)*(2 * w_size + 1);
-	int *d = (int *)malloc(sizeof(int)*Area);//Êı×é¿Õ¼ä
-	int T = 0;//ãĞÖµ
-	int S = 0;//±ê×¼²î
+	int *d = (int *)malloc(sizeof(int)*Area);//æ•°ç»„ç©ºé—´
+	int T = 0;//é˜ˆå€¼
+	int S = 0;//æ ‡å‡†å·®
 	
 	for (j = w_size; j < ysize - w_size; j++)
 	{
@@ -582,12 +604,12 @@ void NiBlack(BYTE *image_in, BYTE *image_out, int xsize, int ysize)
 			{
 				for (k = 0; k < 2 * w_size + 1; k++)
 				{
-					d[num++] = GetGray(image_in, xsize, i + w_size - k, j + w_size - h);		//ÇóareaÁìÓòÄÚµÄÏñËØÖµ
+					d[num++] = GetGray(image_in, xsize, i + w_size - k, j + w_size - h);		//æ±‚areaé¢†åŸŸå†…çš„åƒç´ å€¼
 				}
 			}
 			for (h = 0; h <Area; h++)
 			{
-				sum += d[h];//Çó×ÜºÍ
+				sum += d[h];//æ±‚æ€»å’Œ
 			}
 			Average = sum / Area;
 			sum = 0;
@@ -597,7 +619,7 @@ void NiBlack(BYTE *image_in, BYTE *image_out, int xsize, int ysize)
 			}
 			S = sqrt((float)sum);
 			S = S / Area;
- 			T = Average + 0.05*S;//È·¶¨ãĞÖµ
+ 			T = Average + 0.05*S;//ç¡®å®šé˜ˆå€¼
 			*(image_out + j *xsize + i) = *(image_in + j *xsize + i) > T ? 255 : 0;
 		}
 	}

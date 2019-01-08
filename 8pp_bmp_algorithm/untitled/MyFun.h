@@ -48,3 +48,7 @@ void NiBlack(BYTE *image_in, BYTE *image_out, int xsize, int ysize);
 void bpp82grayscale(long height, long width, BYTE *image_in);
 void bilinera_interpolation(BYTE* in_array, int height, int width,
                             BYTE* out_array, int out_height, int out_width);
+void interpolation(BYTE* in_array, int height, int width,
+                   BYTE* out_array, int out_height, int out_width);
+
+
