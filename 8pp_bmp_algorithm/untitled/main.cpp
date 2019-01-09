@@ -5,27 +5,28 @@
 #include "MyDib.h"
 
 #define amp 2
-#define h 96*amp
-#define w 384*amp
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
     MyDib* test = new MyDib();
-    test->Open("11111.bmp");
+    test->Open("11.bmp");
     printf("%d,%d,%d,%d",test->GetHeight(),test->GetWidth(),test->GetBiBitCount(),
            test->GetSize());
- //   QByteArray asu = QByteArray::fromRawData((char*)test->GetBits(),test->GetSize()*3);
- //   qDebug() << asu.toHex();
-   // Median(test->m_pDibBits,test->m_pDibBits,test->GetWidth(),test->GetHeight());
-//    bpp82grayscale(test->GetHeight(), test->GetWidth(),test->m_pDibBits);
+//    bpp82grayscale(test->GetHeight(),test->GetWidth(),test->m_pDibBits);
+    int h = test->GetHeight()*amp;
+    int w = test->GetWidth()*amp;
 
-    BYTE tttt[h][w];
-    bilinera_interpolation(test->m_pDibBits, test->GetHeight(),test->GetWidth(),tttt[0], h, w);
- //   interpolation(test->m_pDibBits, test->GetHeight(),test->GetWidth(),tttt[0], h, w);
-    test->SetBits(&tttt[0][0]);
- //   Image_smooth(test->m_pDibBits,test->m_pDibBits,96*2,384*2);
-    Binary(test->m_pDibBits,test->m_pDibBits,h,w,0x7f);
+    BYTE *tttt = (BYTE*)malloc(h*w*sizeof (BYTE)*3);
+//    interpolation(test->m_pDibBits, test->GetHeight(),test->GetWidth(),tttt, h, w,test->GetBiBitCount()/8);
+    bilinera_interpolation(test->m_pDibBits, test->GetHeight(),test->GetWidth(),tttt, h, w, test->GetBiBitCount()/8);
+
+    test->SetBits(tttt);
+
+ //   Erodible(test->m_pDibBits,test->m_pDibBits,w,h);
+    //Binary(test->m_pDibBits,test->m_pDibBits,w,h,0x7f);
+ //   Mean_method(test->m_pDibBits,test->m_pDibBits,w,h);
+
     test->Save("asssssas.bmp",h,w);
 
     return a.exec();

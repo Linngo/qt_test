@@ -30,7 +30,8 @@ int  MyDib::GetBiBitCount()
 
 int	 MyDib::GetSize()
 {
-	return  ((BITMAPINFOHEADER *)m_pDib)->biWidth*((BITMAPINFOHEADER *)m_pDib)->biHeight;
+    //return  ((BITMAPINFOHEADER *)m_pDib)->biWidth*((BITMAPINFOHEADER *)m_pDib)->biHeight;
+    return ((BITMAPINFOHEADER *)m_pDib)->biSizeImage;
 }
 
 bool MyDib::Open(char* pzFileName)
@@ -86,52 +87,55 @@ exit:
 bool MyDib::Save(char* pzFileName,int h, int w)
 {
 	FILE *fp;
-	int nBmpFileHeaderSize;
-    RGBQUAD rgb[256];
-	//位图文件头,大小占14个字节
-	nBmpFileHeaderSize = sizeof(BITMAPFILEHEADER);
+    int nBmpFileHeaderSize = sizeof(BITMAPFILEHEADER);//位图文件头,大小占14个字节
+    BITMAPINFOHEADER*  bi = (BITMAPINFOHEADER *)m_pDib;
 
 	fp = fopen(pzFileName, "wb");
 	if (!fp)
         return FALSE;
    //     goto exit;
 	//写文件头信息
-    bmpFileHeader.bfSize=h*w;
-
+    bmpFileHeader.bfSize=h*w+nBmpFileHeaderSize+bi->biSize;
 	fwrite(&bmpFileHeader, nBmpFileHeaderSize,1,fp);
 	//写信息头信息
-	BITMAPINFOHEADER*   bi = (BITMAPINFOHEADER *)m_pDib;
 
     bi->biWidth=w;
     bi->biHeight=h;
+    bi->biSizeImage = bi->biSizeImage*4;
 
 	fwrite(bi, bi->biSize, 1, fp);
 	//判断m_pDib是不是分配失败
 	if (!m_pDib)
 		goto failure;
 
-	//向文件中写入调色板
-    for (int i = 0, j = 0; i < 256; i++)
-    {
-        rgb[i].rgbBlue = i;
-        rgb[i].rgbGreen = i;
-        rgb[i].rgbRed = i;
-        rgb[i].rgbReserved = 0;
-    }
-//    memcpy(rgb,m_pDib+40,1024);
 
-//    for (int i = 0; i < 256; i++)
-//    {
-//        int j=((rgb[i].rgbRed) +
-//           (rgb[i].rgbBlue) +
-//           (rgb[i].rgbGreen)) / 3;
-//        rgb[i].rgbBlue = j;
-//        rgb[i].rgbGreen = j;
-//        rgb[i].rgbRed = j;
-//        rgb[i].rgbReserved = 0;
-//    }
+   if (((BITMAPINFOHEADER *)m_pDib)->biBitCount == 8){
+      RGBQUAD rgb[256];
+       //向文件中写入调色板
+   //    for (int i = 0, j = 0; i < 256; i++)
+   //    {
+   //        rgb[i].rgbBlue = i;
+   //        rgb[i].rgbGreen = i;
+   //        rgb[i].rgbRed = i;
+   //        rgb[i].rgbReserved = 0;
+   //    }
+       memcpy(rgb,m_pDib+40,1024);
 
-	fwrite(&rgb, sizeof(rgb), 1, fp);
+   //    for (int i = 0; i < 256; i++)
+   //    {
+   //        int j=((rgb[i].rgbRed) +
+   //           (rgb[i].rgbBlue) +
+   //           (rgb[i].rgbGreen)) / 3;
+   //        rgb[i].rgbBlue = j;
+   //        rgb[i].rgbGreen = j;
+   //        rgb[i].rgbRed = j;
+   //        rgb[i].rgbReserved = 0;
+   //    }
+       fwrite(&rgb, sizeof(rgb), 1, fp);
+   }
+
+   printf("\r\n%d,%d,%d,%d",this->GetHeight(),this->GetWidth(),this->GetBiBitCount(),
+          this->GetSize());
 	//向文件中写入位图信息
     fwrite(m_pDibBits, this->GetSize(),1,fp);
 	 

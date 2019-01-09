@@ -439,8 +439,6 @@ void Dilation(BYTE *image_in, BYTE *image_out, int xsize, int ysize)
 void Mean_method(BYTE *image_in, BYTE *image_out, int xsize, int ysize)
 {
 	/*////////////////////////////////////////////////////////////////////
-	// 作者：杨魁
-	//参数列表：
 	//image_in			输入图像的指针
 	//image_out		输出图像的指针
 	//xsize				图像的宽
@@ -525,37 +523,46 @@ int is_in_array(int x, int y, int height, int width)
 双线性内插
 ***************************/
 void bilinera_interpolation(BYTE* in_array, int height, int width,
-                            BYTE* out_array, int out_height, int out_width)
+                            BYTE* out_array, int out_height, int out_width,
+                            BYTE channels)
 {
     double h_times = (double)out_height / (double)height,
            w_times = (double)out_width / (double)width;
     int  x1, y1, x2, y2, f11, f12, f21, f22;
-    double x, y;
-    double test = 0;
+    float x, y;
+    float test = 0.2;
 
-    for (int i = 0; i < out_height; i++){
-        for (int j = 0; j < out_width; j++){
-            x = (j+test) / w_times - test;
-            y = (i+test) / h_times - test;
+    for (int i = 0; i < out_height; i++){      //高
+        y = (float)(i+test) / h_times - test;
+
+        y1 = (int)(y + 1);
+        y2 = (int)(y - 1);
+
+        for (int j = 0; j < out_width; j++){   //宽
+            x = (float)(j+test) / w_times - test;
+
             x1 = (int)(x - 1);
             x2 = (int)(x + 1);
-            y1 = (int)(y + 1);
-            y2 = (int)(y - 1);
-            f11 = is_in_array(x1, y1, height, width) ? *(in_array+y1*width+x1) : 0;
-            f12 = is_in_array(x1, y2, height, width) ? *(in_array+y2*width+x1) : 0;
-            f21 = is_in_array(x2, y1, height, width) ? *(in_array+y1*width+x2) : 0;
-            f22 = is_in_array(x2, y2, height, width) ? *(in_array+y2*width+x2) : 0;
-            *(out_array+i*out_width+j) = (long)(((f11 * (x2 - x) * (y2 - y)) +
-                                       (f21 * (x - x1) * (y2 - y)) +
-                                       (f12 * (x2 - x) * (y - y1)) +
-                                       (f22 * (x - x1) * (y - y1))) / ((x2 - x1) * (y2 - y1)));
+
+            for (int k = 0; k < channels; ++k){ //像素宽
+                f11 = is_in_array(x1, y1, height, width) ? *(in_array+(y1*width+x1)*channels+k) : 0;
+                f12 = is_in_array(x1, y2, height, width) ? *(in_array+(y2*width+x1)*channels+k) : 0;
+                f21 = is_in_array(x2, y1, height, width) ? *(in_array+(y1*width+x2)*channels+k) : 0;
+                f22 = is_in_array(x2, y2, height, width) ? *(in_array+(y2*width+x2)*channels+k) : 0;
+                *(out_array+(i*out_width+j)*channels+k) = (double)(((f11 * (x2 - x) * (y2 - y)) +
+                                           (f21 * (x - x1) * (y2 - y)) +
+                                           (f12 * (x2 - x) * (y - y1)) +
+                                           (f22 * (x - x1) * (y - y1))) / ((x2 - x1) * (y2 - y1)));
+            }
+
         }
     }
 }
 
 //最邻近点
 void interpolation(BYTE* in_array, int height, int width,
-                   BYTE* out_array, int out_height, int out_width)
+                   BYTE* out_array, int out_height, int out_width,
+                   BYTE channels)
 {
     int i,j;
     int dwsrcY,dwsrcX;
@@ -563,12 +570,12 @@ void interpolation(BYTE* in_array, int height, int width,
     for(i=0;i<out_height;i++)
     {
      dwsrcY=i*height/out_height;
-     pucDest=out_array+i*out_width;
-     pucSrc=in_array+dwsrcY*width;
+     pucDest=out_array+i*out_width*channels;
+     pucSrc=in_array+dwsrcY*width*channels;
      for(j=0;j<out_width;j++)
      {
       dwsrcX=j*width/out_width;
-      memcpy(pucDest+j,pucSrc+dwsrcX,1);//数据拷贝
+      memcpy(pucDest+j*channels,pucSrc+dwsrcX*channels,channels);//数据拷贝
      }
     }
 }
